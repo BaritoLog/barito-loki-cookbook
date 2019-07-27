@@ -2,8 +2,8 @@ name 'barito-loki-cookbook'
 maintainer 'The Authors'
 maintainer_email 'you@example.com'
 license 'All Rights Reserved'
-description 'Installs/Configures barito-loki-cookbook'
-long_description 'Installs/Configures barito-loki-cookbook'
+description 'Installs/Configures barito loki'
+long_description 'Installs/Configures barito loki'
 version '0.1.0'
 chef_version '>= 14.0'
 
@@ -18,3 +18,5 @@ chef_version '>= 14.0'
 # a Supermarket.
 #
 # source_url 'https://github.com/<insert_org_here>/barito-loki-cookbook'
+
+depends 'ark'
