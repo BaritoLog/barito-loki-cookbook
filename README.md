@@ -1,4 +1,4 @@
 # barito-loki-cookbook
 
-TODO: Enter the cookbook description here.
+Chef cookbook for provisioning Barito Loki
 
