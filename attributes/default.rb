@@ -19,6 +19,10 @@ default[cookbook_name]['prefix_root'] = '/opt'
 # Where to link binaries
 default[cookbook_name]['prefix_bin'] = '/opt/bin'
 
+# Attributes for registering these services to consul
+default[cookbook_name]['consul']['config_dir'] = '/opt/consul/etc'
+default[cookbook_name]['consul']['bin'] = '/opt/bin/consul'
+
 #
 # default
 #
