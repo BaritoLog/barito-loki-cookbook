@@ -1,3 +1,9 @@
+Metrics/BlockLength:
+  Max: 100
+
+Metrics/LineLength:
+  Max: 100
+
 Naming/FileName:
   Enabled: false
 
