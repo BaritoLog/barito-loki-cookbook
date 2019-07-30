@@ -2,7 +2,7 @@ Metrics/BlockLength:
   Max: 100
 
 Metrics/LineLength:
-  Max: 100
+  Max: 120
 
 Naming/FileName:
   Enabled: false
