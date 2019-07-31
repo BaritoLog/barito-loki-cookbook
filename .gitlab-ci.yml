@@ -11,22 +11,22 @@ variables:
 before_script:
     - curl -s https://raw.githubusercontent.com/BaritoLog/cx-scripts/master/gitlabci-install-packer.sh | bash
 
-validate-barito-loki-flow:
+validate-barito-loki:
   stage: validate
   variables:
-    OUTPUT_IMAGE: "lxd-barito-loki-flow-$CI_COMMIT_TAG"
+    OUTPUT_IMAGE: "lxd-barito-loki-$CI_COMMIT_TAG"
   script:
-    - ./packer/packer validate ./packer-barito-loki-flow.json
+    - ./packer/packer validate ./packer-barito-loki.json
   tags:
     - bionic
 
 
-build-base-barito-loki-flow:
+build-base-barito-loki:
   stage: build-base
   variables:
-    OUTPUT_IMAGE: "lxd-barito-loki-flow-$CI_COMMIT_TAG"
+    OUTPUT_IMAGE: "lxd-barito-loki-$CI_COMMIT_TAG"
   script:
-    - curl -s https://raw.githubusercontent.com/BaritoLog/cx-scripts/master/gitlabci-build-base.sh | bash -s ./packer-barito-loki-flow.json
+    - curl -s https://raw.githubusercontent.com/BaritoLog/cx-scripts/master/gitlabci-build-base.sh | bash -s ./packer-barito-loki.json
     - curl -s https://raw.githubusercontent.com/BaritoLog/cx-scripts/master/gitlabci-copy-image.sh | bash
   tags:
     - bionic

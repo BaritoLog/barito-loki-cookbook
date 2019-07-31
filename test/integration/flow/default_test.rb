@@ -25,15 +25,15 @@ describe directory('/var/cache/chef') do
   its('mode') { should cmp '0755' }
 end
 
-describe file('/opt/bin/barito-loki-flow') do
+describe file('/opt/bin/barito-loki') do
   its('mode') { should cmp '0755' }
 end
 
-describe file('/etc/default/barito-loki-flow') do
+describe file('/etc/default/barito-loki') do
   its('mode') { should cmp '0600' }
 end
 
-describe systemd_service('barito-loki-flow') do
+describe systemd_service('barito-loki') do
   it { should be_installed }
   it { should be_enabled }
 end

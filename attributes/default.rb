@@ -36,7 +36,7 @@ default[cookbook_name]['flow']['binary'] = 'barito-loki-linux'
 flow_binary = node[cookbook_name]['flow']['binary']
 default[cookbook_name]['flow']['mirror'] =
   "https://github.com/vwidjaya/barito-loki/releases/download/#{flow_version}/#{flow_binary}"
-default[cookbook_name]['flow']['service_name'] = 'barito-loki-flow'
+default[cookbook_name]['flow']['service_name'] = 'barito-loki'
 
 # environment variables
 default[cookbook_name]['flow']['prefix_env_vars'] = '/etc/default'
@@ -45,7 +45,7 @@ default[cookbook_name]['flow']['env_vars_file'] =
 default[cookbook_name]['flow']['env_vars'] = {}
 
 # log file location
-default[cookbook_name]['flow']['prefix_log'] = '/var/log/barito-loki-flow'
+default[cookbook_name]['flow']['prefix_log'] = '/var/log/barito-loki'
 default[cookbook_name]['flow']['log_file_name'] = 'error.log'
 
 # default Systemd service unit, include config
