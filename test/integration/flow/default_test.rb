@@ -4,11 +4,11 @@
 # found at http://inspec.io/docs/reference/resources/
 
 unless os.windows?
-  describe group('barito') do
+  describe group('barito_loki') do
     it { should exist }
   end
 
-  describe user('barito') do
+  describe user('barito_loki') do
     it { should exist }
   end
 end

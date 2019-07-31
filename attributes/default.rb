@@ -9,8 +9,8 @@
 cookbook_name = 'barito-loki'
 
 # User and group of service process
-default[cookbook_name]['user'] = 'barito'
-default[cookbook_name]['group'] = 'barito'
+default[cookbook_name]['user'] = 'barito_loki'
+default[cookbook_name]['group'] = 'barito_loki'
 
 # Temp directory
 default[cookbook_name]['prefix_temp'] = '/var/cache/chef'
