@@ -18,12 +18,12 @@ platforms:
       product_version: latest
 
 suites:
-  - name: default
+  - name: flow
     run_list:
-      - recipe[barito-loki::default]
+      - recipe[barito-loki::flow]
     verifier:
       inspec_tests:
-        - test/integration/default
+        - test/integration/flow
     attributes:
   - name: router
     run_list:

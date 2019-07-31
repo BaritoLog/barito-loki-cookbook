@@ -18,8 +18,8 @@
 
   },
   "version": "0.1.0",
-  "source_url": "",
-  "issues_url": "",
+  "source_url": "https://github.com/vwidjaya/barito-loki-cookbook",
+  "issues_url": "https://github.com/vwidjaya/barito-loki-cookbook/issues",
   "privacy": false,
   "chef_versions": [
     [
