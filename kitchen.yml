@@ -25,17 +25,3 @@ suites:
       inspec_tests:
         - test/integration/flow
     attributes:
-  - name: router
-    run_list:
-      - recipe[barito-loki::router]
-    verifier:
-      inspec_tests:
-        - test/integration/router
-    attributes:
-      barito-loki:
-        router:
-          env_vars:
-            BARITO_ROUTER_ADDRESS: ':8081'
-            BARITO_KIBANA_ROUTER_ADDRESS: ':8082'
-            BARITO_XTAIL_ROUTER_ADDRESS: ':8083'
-            BARITO_ROUTER_MARKET_URL: 'http://localhost:8080/api/apps'
