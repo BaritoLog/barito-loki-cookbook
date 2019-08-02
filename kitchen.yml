@@ -25,3 +25,10 @@ suites:
       inspec_tests:
         - test/integration/flow
     attributes:
+  - name: loki
+    run_list:
+      - recipe[barito-loki::loki]
+    verifier:
+      inspec_tests:
+        - test/integration/loki
+    attributes:

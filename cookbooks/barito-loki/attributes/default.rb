@@ -68,3 +68,117 @@ default[cookbook_name]['flow']['systemd_unit'] = {
     'WantedBy' => 'multi-user.target'
   }
 }
+
+#
+# Loki
+#
+
+# default version
+default[cookbook_name]['loki']['version'] = 'v0.1.0'
+loki_version = node[cookbook_name]['loki']['version']
+
+# where to get the binary
+default[cookbook_name]['loki']['binary'] = "loki_#{loki_version}_linux_amd64"
+loki_binary = node[cookbook_name]['loki']['binary']
+default[cookbook_name]['loki']['mirror'] =
+  "https://github.com/grafana/loki/releases/download/#{loki_version}/#{loki_binary}"
+default[cookbook_name]['loki']['service_name'] = 'loki'
+
+# config yml
+default[cookbook_name]['loki']['prefix_config'] = '/etc/default'
+default[cookbook_name]['loki']['config_file'] =
+  "#{node[cookbook_name]['loki']['prefix_config']}/#{node[cookbook_name]['loki']['service_name']}-config.yml"
+default[cookbook_name]['loki']['config'] = {
+  'auth_enabled' => false,
+  'server' => {
+    'http_listen_port' => 3100
+  },
+  'ingester' => {
+    'lifecycler' => {
+      'address' => '127.0.0.1',
+      'ring' => {
+        'kvstore' => {
+          'store' => 'inmemory'
+        },
+        'replication_factor' => 1
+      },
+      'final_sleep' => '0s'
+    },
+    'chunk_idle_period' => '5m',
+    'chunk_retain_period' => '30s'
+  },
+  'schema_config' => {
+    'configs' => [
+      {
+        'from' => '2018-04-15',
+        'store' => 'boltdb',
+        'object_store' => 'filesystem',
+        'schema' => 'v9',
+        'index' => {
+          'prefix' => 'index_',
+          'period' => '168h'
+        }
+      }
+    ]
+  },
+  'storage_config' => {
+    'boltdb' => {
+      'directory' => '/tmp/loki/index'
+    },
+    'filesystem' => {
+      'directory' => '/tmp/loki/chunks'
+    }
+  },
+  'limits_config' => {
+    'enforce_metric_name' => false,
+    'reject_old_samples' => true,
+    'reject_old_samples_max_age' => '168h'
+  },
+  'chunk_store_config' => {
+    'max_look_back_period' => 0
+  },
+  'table_manager' => {
+    'chunk_tables_provisioning' => {
+      'inactive_read_throughput' => 0,
+      'inactive_write_throughput' => 0,
+      'provisioned_read_throughput' => 0,
+      'provisioned_write_throughput' => 0
+    },
+    'index_tables_provisioning' => {
+      'inactive_read_throughput' => 0,
+      'inactive_write_throughput' => 0,
+      'provisioned_read_throughput' => 0,
+      'provisioned_write_throughput' => 0
+    },
+    'retention_deletes_enabled' => false,
+    'retention_period' => 0
+  }
+}
+
+# router daemon options, used to create the ExecStart option in service
+default[cookbook_name]['loki']['cli_opts'] = ["-config.file=#{node[cookbook_name]['loki']['config_file']}"]
+
+# log file location
+default[cookbook_name]['loki']['prefix_log'] = '/var/log/loki'
+default[cookbook_name]['loki']['log_file_name'] = 'error.log'
+
+# default Systemd service unit, include config
+default[cookbook_name]['loki']['systemd_unit'] = {
+  'Unit' => {
+    'Description' => 'loki server',
+    'After' => 'network.target'
+  },
+  'Service' => {
+    'Type' => 'simple',
+    'User' => node[cookbook_name]['user'],
+    'Group' => node[cookbook_name]['group'],
+    'Restart' => 'on-failure',
+    'RestartSec' => 2,
+    'StartLimitInterval' => 50,
+    'StartLimitBurst' => 10,
+    'ExecStart' => 'TO_BE_COMPLETED'
+  },
+  'Install' => {
+    'WantedBy' => 'multi-user.target'
+  }
+}
