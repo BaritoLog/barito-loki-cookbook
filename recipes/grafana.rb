@@ -22,6 +22,13 @@ apt_package 'grafana' do
   action :install
 end
 
+config_file = node[cookbook_name]['grafana']['datasource_file']
+barito_loki_config_yml_file config_file do
+  config node[cookbook_name]['grafana']['datasource']
+  user node[cookbook_name]['user']
+  group node[cookbook_name]['group']
+end
+
 env_vars_file = node[cookbook_name]['grafana']['env_vars_file']
 barito_loki_env_vars_file env_vars_file do
   env_vars node[cookbook_name]['grafana']['env_vars']

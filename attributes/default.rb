@@ -207,3 +207,22 @@ default[cookbook_name]['grafana']['env_vars'] = {
   'PROVISIONING_CFG_DIR' => '/etc/grafana/provisioning',
   'PID_FILE_DIR' => '/var/run/grafana'
 }
+
+# for adding datasources
+default[cookbook_name]['grafana']['prefix_datasource'] = '/etc/grafana/provisioning/datasources'
+default[cookbook_name]['grafana']['datasource_file'] =
+  "#{node[cookbook_name]['grafana']['prefix_datasource']}/datasource.yml"
+default[cookbook_name]['grafana']['datasource'] = {
+  'apiVersion' => 1,
+  'datasources' => [
+    {
+      'name' => 'Loki',
+      'type' => 'loki',
+      'access' => 'proxy',
+      'url' => 'http://192.168.28.68:3100',
+      'jsonData' => {
+        'maxLines' => 1000
+      }
+    }
+  ]
+}
