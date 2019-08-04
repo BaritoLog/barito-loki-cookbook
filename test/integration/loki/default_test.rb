@@ -30,7 +30,7 @@ describe file('/opt/bin/loki') do
 end
 
 describe file('/etc/default/loki-config.yml') do
-  its('mode') { should cmp '0600' }
+  its('mode') { should cmp '0644' }
 end
 
 describe systemd_service('loki') do

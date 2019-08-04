@@ -13,6 +13,10 @@ unless os.windows?
   end
 end
 
+describe file('/etc/grafana/provisioning/datasources/datasource.yml') do
+  its('mode') { should cmp '0644' }
+end
+
 describe systemd_service('grafana-server') do
   it { should be_installed }
   it { should be_enabled }

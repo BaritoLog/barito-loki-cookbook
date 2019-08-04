@@ -8,7 +8,7 @@ action :create do
     source 'config.yml.erb'
     owner new_resource.user
     group new_resource.group
-    mode 0o600
+    mode 0o644
     variables config: YAML.dump(new_resource.config.to_hash)
   end
 end
