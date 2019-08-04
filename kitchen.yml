@@ -32,3 +32,10 @@ suites:
       inspec_tests:
         - test/integration/loki
     attributes:
+  - name: grafana
+    run_list:
+      - recipe[barito-loki::grafana]
+    verifier:
+      inspec_tests:
+        - test/integration/grafana
+    attributes:

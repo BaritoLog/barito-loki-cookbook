@@ -182,3 +182,28 @@ default[cookbook_name]['loki']['systemd_unit'] = {
     'WantedBy' => 'multi-user.target'
   }
 }
+
+#
+# Grafana
+#
+
+default[cookbook_name]['grafana']['service_name'] = 'grafana-server'
+
+# environment variables
+default[cookbook_name]['grafana']['prefix_env_vars'] = '/etc/default'
+default[cookbook_name]['grafana']['env_vars_file'] =
+  "#{node[cookbook_name]['grafana']['prefix_env_vars']}/#{node[cookbook_name]['grafana']['service_name']}"
+default[cookbook_name]['grafana']['env_vars'] = {
+  'GRAFANA_USER' => 'grafana',
+  'GRAFANA_GROUP' => 'grafana',
+  'GRAFANA_HOME' => '/usr/share/grafana',
+  'LOG_DIR' => '/var/log/grafana',
+  'DATA_DIR' => '/var/lib/grafana',
+  'MAX_OPEN_FILES' => 10000,
+  'CONF_DIR' => '/etc/grafana',
+  'CONF_FILE' => '/etc/grafana/grafana.ini',
+  'RESTART_ON_UPGRADE' => true,
+  'PLUGINS_DIR' => '/var/lib/grafana/plugins',
+  'PROVISIONING_CFG_DIR' => '/etc/grafana/provisioning',
+  'PID_FILE_DIR' => '/var/run/grafana'
+}
