@@ -155,7 +155,7 @@ default[cookbook_name]['loki']['config'] = {
   }
 }
 
-# router daemon options, used to create the ExecStart option in service
+# loki daemon options, used to create the ExecStart option in service
 default[cookbook_name]['loki']['cli_opts'] = ["-config.file=#{node[cookbook_name]['loki']['config_file']}"]
 
 # log file location
@@ -181,4 +181,48 @@ default[cookbook_name]['loki']['systemd_unit'] = {
   'Install' => {
     'WantedBy' => 'multi-user.target'
   }
+}
+
+#
+# Grafana
+#
+
+default[cookbook_name]['grafana']['service_name'] = 'grafana-server'
+
+# environment variables
+default[cookbook_name]['grafana']['prefix_env_vars'] = '/etc/default'
+default[cookbook_name]['grafana']['env_vars_file'] =
+  "#{node[cookbook_name]['grafana']['prefix_env_vars']}/#{node[cookbook_name]['grafana']['service_name']}"
+default[cookbook_name]['grafana']['env_vars'] = {
+  'GRAFANA_USER' => 'grafana',
+  'GRAFANA_GROUP' => 'grafana',
+  'GRAFANA_HOME' => '/usr/share/grafana',
+  'LOG_DIR' => '/var/log/grafana',
+  'DATA_DIR' => '/var/lib/grafana',
+  'MAX_OPEN_FILES' => 10_000,
+  'CONF_DIR' => '/etc/grafana',
+  'CONF_FILE' => '/etc/grafana/grafana.ini',
+  'RESTART_ON_UPGRADE' => true,
+  'PLUGINS_DIR' => '/var/lib/grafana/plugins',
+  'PROVISIONING_CFG_DIR' => '/etc/grafana/provisioning',
+  'PID_FILE_DIR' => '/var/run/grafana'
+}
+
+# for adding datasources
+default[cookbook_name]['grafana']['prefix_datasource'] = '/etc/grafana/provisioning/datasources'
+default[cookbook_name]['grafana']['datasource_file'] =
+  "#{node[cookbook_name]['grafana']['prefix_datasource']}/datasource.yml"
+default[cookbook_name]['grafana']['datasource'] = {
+  'apiVersion' => 1,
+  'datasources' => [
+    {
+      'name' => 'Loki',
+      'type' => 'loki',
+      'access' => 'proxy',
+      'url' => 'http://192.168.28.68:3100',
+      'jsonData' => {
+        'maxLines' => 1000
+      }
+    }
+  ]
 }
