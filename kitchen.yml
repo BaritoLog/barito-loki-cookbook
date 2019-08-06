@@ -31,14 +31,12 @@ suites:
   - name: loki
     run_list:
       - recipe[barito-loki::loki]
-      - recipe[barito-loki::promtail]
     driver_config:
       network:
       - ["private_network", {ip: "192.168.28.68"}]
     verifier:
       inspec_tests:
         - test/integration/loki
-        - test/integration/promtail
     attributes:
   - name: grafana
     run_list:

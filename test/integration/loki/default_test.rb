@@ -38,3 +38,17 @@ describe systemd_service('loki') do
   it { should be_enabled }
   it { should be_running }
 end
+
+describe file('/opt/bin/promtail') do
+  its('mode') { should cmp '0755' }
+end
+
+describe file('/etc/default/promtail-config.yml') do
+  its('mode') { should cmp '0644' }
+end
+
+describe systemd_service('promtail') do
+  it { should be_installed }
+  it { should be_enabled }
+  it { should be_running }
+end
