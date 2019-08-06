@@ -42,7 +42,9 @@ default[cookbook_name]['flow']['service_name'] = 'barito-loki'
 default[cookbook_name]['flow']['prefix_env_vars'] = '/etc/default'
 default[cookbook_name]['flow']['env_vars_file'] =
   "#{node[cookbook_name]['flow']['prefix_env_vars']}/#{node[cookbook_name]['flow']['service_name']}"
-default[cookbook_name]['flow']['env_vars'] = {}
+default[cookbook_name]['flow']['env_vars'] = {
+  'BARITO_LOKI_URL' => 'http://192.168.28.68:3100'
+}
 
 # log file location
 default[cookbook_name]['flow']['prefix_log'] = '/var/log/barito-loki'
@@ -74,14 +76,14 @@ default[cookbook_name]['flow']['systemd_unit'] = {
 #
 
 # default version
-default[cookbook_name]['loki']['version'] = 'v0.1.0'
+default[cookbook_name]['loki']['version'] = 'v0.2.0'
 loki_version = node[cookbook_name]['loki']['version']
 
-# where to get the binary
-default[cookbook_name]['loki']['binary'] = "loki_#{loki_version}_linux_amd64"
-loki_binary = node[cookbook_name]['loki']['binary']
-default[cookbook_name]['loki']['mirror'] =
-  "https://github.com/grafana/loki/releases/download/#{loki_version}/#{loki_binary}"
+# where to get the compressed (.gz) binary
+default[cookbook_name]['loki']['gz'] = 'loki_linux_amd64.gz'
+loki_gz = node[cookbook_name]['loki']['gz']
+default[cookbook_name]['loki']['mirror_gz'] =
+  "https://github.com/grafana/loki/releases/download/#{loki_version}/#{loki_gz}"
 default[cookbook_name]['loki']['service_name'] = 'loki'
 
 # config yml
@@ -166,6 +168,84 @@ default[cookbook_name]['loki']['log_file_name'] = 'error.log'
 default[cookbook_name]['loki']['systemd_unit'] = {
   'Unit' => {
     'Description' => 'loki server',
+    'After' => 'network.target'
+  },
+  'Service' => {
+    'Type' => 'simple',
+    'User' => node[cookbook_name]['user'],
+    'Group' => node[cookbook_name]['group'],
+    'Restart' => 'on-failure',
+    'RestartSec' => 2,
+    'StartLimitInterval' => 50,
+    'StartLimitBurst' => 10,
+    'ExecStart' => 'TO_BE_COMPLETED'
+  },
+  'Install' => {
+    'WantedBy' => 'multi-user.target'
+  }
+}
+
+#
+# Promtail
+#
+
+# default version
+default[cookbook_name]['promtail']['version'] = 'v0.2.0'
+promtail_version = node[cookbook_name]['promtail']['version']
+
+# where to get the compressed (.gz) binary
+default[cookbook_name]['promtail']['gz'] = 'promtail_linux_amd64.gz'
+promtail_gz = node[cookbook_name]['promtail']['gz']
+default[cookbook_name]['promtail']['mirror_gz'] =
+  "https://github.com/grafana/loki/releases/download/#{promtail_version}/#{promtail_gz}"
+default[cookbook_name]['promtail']['service_name'] = 'promtail'
+
+# config yml
+default[cookbook_name]['promtail']['prefix_config'] = '/etc/default'
+default[cookbook_name]['promtail']['config_file'] =
+  "#{node[cookbook_name]['promtail']['prefix_config']}/#{node[cookbook_name]['promtail']['service_name']}-config.yml"
+default[cookbook_name]['promtail']['config'] = {
+  'server' => {
+    'http_listen_port' => 9080,
+    'grpc_listen_port' => 0
+  },
+  'positions' => {
+    'filename' => '/tmp/positions.yaml'
+  },
+  'clients' => [
+    {
+      'url' => 'http://localhost:3100/api/prom/push'
+    }
+  ],
+  'scrape_configs' => [
+    {
+      'job_name' => 'system',
+      'static_configs' => [
+        {
+          'targets' => [
+            'localhost'
+          ],
+          'labels' => {
+            'job' => 'varlogs',
+            '__path__' => '/var/log/*log'
+          }
+        }
+      ]
+    }
+  ]
+}
+
+# promtail daemon options, used to create the ExecStart option in service
+default[cookbook_name]['promtail']['cli_opts'] = ["-config.file=#{node[cookbook_name]['promtail']['config_file']}"]
+
+# log file location
+default[cookbook_name]['promtail']['prefix_log'] = '/var/log/promtail'
+default[cookbook_name]['promtail']['log_file_name'] = 'error.log'
+
+# default Systemd service unit, include config
+default[cookbook_name]['promtail']['systemd_unit'] = {
+  'Unit' => {
+    'Description' => 'promtail server',
     'After' => 'network.target'
   },
   'Service' => {
