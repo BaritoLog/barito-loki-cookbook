@@ -76,14 +76,14 @@ default[cookbook_name]['flow']['systemd_unit'] = {
 #
 
 # default version
-default[cookbook_name]['loki']['version'] = 'v0.1.0'
+default[cookbook_name]['loki']['version'] = 'v0.2.0'
 loki_version = node[cookbook_name]['loki']['version']
 
-# where to get the binary
-default[cookbook_name]['loki']['binary'] = "loki_#{loki_version}_linux_amd64"
-loki_binary = node[cookbook_name]['loki']['binary']
-default[cookbook_name]['loki']['mirror'] =
-  "https://github.com/grafana/loki/releases/download/#{loki_version}/#{loki_binary}"
+# where to get the compressed (.gz) binary
+default[cookbook_name]['loki']['gz'] = 'loki_linux_amd64.gz'
+loki_gz = node[cookbook_name]['loki']['gz']
+default[cookbook_name]['loki']['mirror_gz'] =
+  "https://github.com/grafana/loki/releases/download/#{loki_version}/#{loki_gz}"
 default[cookbook_name]['loki']['service_name'] = 'loki'
 
 # config yml
@@ -190,14 +190,14 @@ default[cookbook_name]['loki']['systemd_unit'] = {
 #
 
 # default version
-default[cookbook_name]['promtail']['version'] = 'v0.1.0'
+default[cookbook_name]['promtail']['version'] = 'v0.2.0'
 promtail_version = node[cookbook_name]['promtail']['version']
 
-# where to get the binary
-default[cookbook_name]['promtail']['binary'] = "promtail_#{promtail_version}_linux_amd64"
-promtail_binary = node[cookbook_name]['promtail']['binary']
-default[cookbook_name]['promtail']['mirror'] =
-  "https://github.com/grafana/loki/releases/download/#{promtail_version}/#{promtail_binary}"
+# where to get the compressed (.gz) binary
+default[cookbook_name]['promtail']['gz'] = 'promtail_linux_amd64.gz'
+promtail_gz = node[cookbook_name]['promtail']['gz']
+default[cookbook_name]['promtail']['mirror_gz'] =
+  "https://github.com/grafana/loki/releases/download/#{promtail_version}/#{promtail_gz}"
 default[cookbook_name]['promtail']['service_name'] = 'promtail'
 
 # config yml

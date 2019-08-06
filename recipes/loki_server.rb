@@ -6,12 +6,12 @@
 
 service_name = node[cookbook_name]['loki']['service_name']
 
-barito_loki_binary_install service_name do
+barito_loki_gz_install service_name do
   version node[cookbook_name]['loki']['version']
   prefix_root node[cookbook_name]['prefix_root']
   prefix_bin node[cookbook_name]['prefix_bin']
   prefix_temp node[cookbook_name]['prefix_temp']
-  mirror node[cookbook_name]['loki']['mirror']
+  mirror_gz node[cookbook_name]['loki']['mirror_gz']
   user node[cookbook_name]['user']
   group node[cookbook_name]['group']
 end
