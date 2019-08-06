@@ -184,6 +184,84 @@ default[cookbook_name]['loki']['systemd_unit'] = {
 }
 
 #
+# Promtail
+#
+
+# default version
+default[cookbook_name]['promtail']['version'] = 'v0.1.0'
+promtail_version = node[cookbook_name]['promtail']['version']
+
+# where to get the binary
+default[cookbook_name]['promtail']['binary'] = "promtail_#{promtail_version}_linux_amd64"
+promtail_binary = node[cookbook_name]['promtail']['binary']
+default[cookbook_name]['promtail']['mirror'] =
+  "https://github.com/grafana/loki/releases/download/#{promtail_version}/#{promtail_binary}"
+default[cookbook_name]['promtail']['service_name'] = 'promtail'
+
+# config yml
+default[cookbook_name]['promtail']['prefix_config'] = '/etc/default'
+default[cookbook_name]['promtail']['config_file'] =
+  "#{node[cookbook_name]['promtail']['prefix_config']}/#{node[cookbook_name]['promtail']['service_name']}-config.yml"
+default[cookbook_name]['promtail']['config'] = {
+  'server' => {
+    'http_listen_port' => 9080,
+    'grpc_listen_port' => 0
+  },
+  'positions' => {
+    'filename' => '/tmp/positions.yaml'
+  },
+  'clients' => [
+    {
+      'url' => 'http://localhost:3100/api/prom/push'
+    }
+  ],
+  'scrape_configs' => [
+    {
+      'job_name' => 'system',
+      'static_configs' => [
+        {
+          'targets' => [
+            'localhost'
+          ],
+          'labels' => {
+            'job' => 'varlogs',
+            '__path__' => '/var/log/*log'
+          }
+        }
+      ]
+    }
+  ]
+}
+
+# promtail daemon options, used to create the ExecStart option in service
+default[cookbook_name]['promtail']['cli_opts'] = ["-config.file=#{node[cookbook_name]['promtail']['config_file']}"]
+
+# log file location
+default[cookbook_name]['promtail']['prefix_log'] = '/var/log/promtail'
+default[cookbook_name]['promtail']['log_file_name'] = 'error.log'
+
+# default Systemd service unit, include config
+default[cookbook_name]['promtail']['systemd_unit'] = {
+  'Unit' => {
+    'Description' => 'promtail server',
+    'After' => 'network.target'
+  },
+  'Service' => {
+    'Type' => 'simple',
+    'User' => node[cookbook_name]['user'],
+    'Group' => node[cookbook_name]['group'],
+    'Restart' => 'on-failure',
+    'RestartSec' => 2,
+    'StartLimitInterval' => 50,
+    'StartLimitBurst' => 10,
+    'ExecStart' => 'TO_BE_COMPLETED'
+  },
+  'Install' => {
+    'WantedBy' => 'multi-user.target'
+  }
+}
+
+#
 # Grafana
 #
 
