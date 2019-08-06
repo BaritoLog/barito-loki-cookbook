@@ -42,7 +42,9 @@ default[cookbook_name]['flow']['service_name'] = 'barito-loki'
 default[cookbook_name]['flow']['prefix_env_vars'] = '/etc/default'
 default[cookbook_name]['flow']['env_vars_file'] =
   "#{node[cookbook_name]['flow']['prefix_env_vars']}/#{node[cookbook_name]['flow']['service_name']}"
-default[cookbook_name]['flow']['env_vars'] = {}
+default[cookbook_name]['flow']['env_vars'] = {
+  'BARITO_LOKI_URL' => 'http://192.168.28.68:3100'
+}
 
 # log file location
 default[cookbook_name]['flow']['prefix_log'] = '/var/log/barito-loki'
