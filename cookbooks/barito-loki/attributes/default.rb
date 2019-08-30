@@ -28,7 +28,7 @@ default[cookbook_name]['consul']['bin'] = '/opt/bin/consul'
 #
 
 # default version
-default[cookbook_name]['flow']['version'] = 'v0.1'
+default[cookbook_name]['flow']['version'] = 'v1.0.0'
 flow_version = node[cookbook_name]['flow']['version']
 
 # where to get the binary
